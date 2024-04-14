@@ -2,9 +2,6 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "deploy": "kubectl create deployment test-express --image=sagnikghosh/test-express",
-    
-    "start:traefik": "docker run -d -v $(pwd)/traefik.yml:/etc/traefik/traefik.yml -v $(pwd)/test-express.yml:/etc/traefik/services/test-express.yml --network host --name traefik traefik"
   },
   "dependencies": {
     "express": "^4.19.2"
