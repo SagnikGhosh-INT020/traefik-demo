@@ -1,0 +1,12 @@
+http:
+  routers:
+    frontend1:
+      rule: "Host(`localhost`)"
+      service: "backend1"
+      entryPoints:
+        - "web"
+  services:
+    backend1:
+      loadBalancer:
+        servers:
+          - url: 'http://{{ env "APP_URL" }}'

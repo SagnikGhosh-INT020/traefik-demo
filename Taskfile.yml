@@ -1,0 +1,29 @@
+version: "3"
+
+vars:
+  PORT: 8081
+  KUBECTL: "minikube kubectl --"
+  TASK: "go-task"
+
+tasks:
+  start:
+    cmds:
+      - \{{.TASK}} deploy
+      - \{{.TASK}} expose
+
+  deploy:
+    cmds:
+      - \{{.KUBECTL}} apply -f ./k8s-manifest/deploy.yml
+      - \{{.KUBECTL}} apply -f ./k8s-manifest/nodeport.yml
+  
+  expose:
+    cmds:
+      - |
+        APP_URL=$(minikube ip):$({{.KUBECTL}} get service test-express -o=jsonpath='{.spec.ports[?(@.nodePort)].nodePort}')
+        PORT={{.PORT}} APP_URL=$APP_URL docker compose -f ./traefik/docker-compose.yml up -d
+
+  stop:
+    cmds:
+      - \{{.KUBECTL}} delete -f./k8s-manifest/deploy.yml
+      - \{{.KUBECTL}} delete -f./k8s-manifest/nodeport.yml
+      - docker compose -f ./traefik/docker-compose.yml down

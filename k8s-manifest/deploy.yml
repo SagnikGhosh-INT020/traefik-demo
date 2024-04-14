@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-express
+  labels:
+    app: test-express
+spec:
+  selector:
+    matchLabels:
+      app: test-express
+  template:
+    metadata:
+      labels:
+        app: test-express
+    spec:
+      containers:
+      - image: sagnikghosh/test-express
+        name: test-express
+        ports:
+        - containerPort: 3001
